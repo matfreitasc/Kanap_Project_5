@@ -1,4 +1,4 @@
-let currentItems = {
+let data = {
   colors: "",
   _id: "",
   name: "",
@@ -46,9 +46,7 @@ function createItem(data) {
   });
 
   //Add To Cart Button
-  document.querySelector("#addToCart").addEventListener("click", (e) => {
-    e.preventDefault();
-  });
+  document.querySelector("#addToCart").addEventListener("click", addToCart);
 
   // Push quantity to the cart
   getItemQuantity(data.value);
@@ -66,7 +64,9 @@ function addDropDownColors(colors) {
 // Handle quanity of the product
 function getItemQuantity(value) {
   let quantity = document.querySelector("#quantity");
+  quantity.value = value;
   quantity.addEventListener("change", (e) => {
-    createItem.quantity = e.target.value;
+    data.quantity = e.target.value;
   });
 }
+console.log(data);
