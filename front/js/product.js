@@ -1,4 +1,4 @@
-let data = {
+let itemData = {
   colors: "",
   _id: "",
   name: "",
@@ -6,7 +6,7 @@ let data = {
   imageUrl: "",
   description: "",
   altTxt: "",
-  quantity: "",
+  quantity: 1,
 };
 
 const url = new URL("http://localhost:3000/api/products");
@@ -18,38 +18,43 @@ const dropDownColors = document.querySelector("#colors");
 
 fetch(url + "/" + id)
   .then((response) => response.json())
-  .then((jsonResponse) => createItem(jsonResponse));
+  .then((data) => {
+    console.log(data);
+    itemData = data;
+    createItem(data);
+  })
+  .catch((error) => console.log("Fetch Error.", error));
 
-function createItem(data) {
-  console.log(data);
+function createItem(itemData) {
+  console.log(itemData);
 
   // Change title of the page
-  document.querySelector("title").innerHTML = data.name;
+  document.querySelector("title").innerHTML = itemData.name;
 
   //Product Image
   document.querySelector("#img").innerHTML =
-    '<img src="' + data.imageUrl + '" alt="' + data.altTxt + '">';
+    '<img src="' + itemData.imageUrl + '" alt="' + itemData.altTxt + '">';
 
   //Name of the product
-  document.querySelector("#title").innerHTML = data.name;
+  document.querySelector("#title").innerHTML = itemData.name;
 
   //Price of the product
-  document.querySelector("#price").innerHTML = data.price;
+  document.querySelector("#price").innerHTML = itemData.price;
 
   //Product Description
-  document.querySelector("#description").innerHTML = data.description;
+  document.querySelector("#description").innerHTML = itemData.description;
 
   //Color Dropdown Menu
-  addDropDownColors(data.colors);
+  addDropDownColors(itemData.colors);
   dropDownColors.addEventListener("change", (e) => {
-    data.colors = e.target.value;
+    itemData.colors = e.target.value;
   });
 
   //Add To Cart Button
   document.querySelector("#addToCart").addEventListener("click", addToCart);
 
   // Push quantity to the cart
-  getItemQuantity(data.value);
+  getItemQuantity(itemData.value);
 }
 // Add colors to the dropdown menu
 function addDropDownColors(colors) {
@@ -66,7 +71,18 @@ function getItemQuantity(value) {
   let quantity = document.querySelector("#quantity");
   quantity.value = value;
   quantity.addEventListener("change", (e) => {
-    data.quantity = e.target.value;
+    itemData.quantity = e.target.value;
   });
 }
+
+function addToCart() {
+  let cart = JSON.parse(localStorage.getItem("cart"));
+  if (cart === null) {
+    cart = [];
+  }
+  cart.push(itemData);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  console.log(cart);
+}
+
 console.log(data);
