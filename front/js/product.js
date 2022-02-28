@@ -26,8 +26,6 @@ fetch(url + "/" + id)
   .catch((error) => console.log("Fetch Error.", error));
 
 function createItem(itemData) {
-  console.log(itemData);
-
   // Change title of the page
   document.querySelector("title").innerHTML = itemData.name;
 
@@ -69,11 +67,11 @@ function addDropDownColors(colors) {
 // Handle quanity of the product
 function getItemQuantity(value) {
   let quantity = document.querySelector("#quantity");
-  quantity.value = value;
-  quantity.addEventListener("change", (e) => {
+  quantity.addEventListener("input", (e) => {
     itemData.quantity = e.target.value;
   });
 }
+console.log(getItemQuantity(itemData.quantity));
 
 function addToCart() {
   let cart = JSON.parse(localStorage.getItem("cart"));
@@ -82,7 +80,4 @@ function addToCart() {
   }
   cart.push(itemData);
   localStorage.setItem("cart", JSON.stringify(cart));
-  console.log(cart);
 }
-
-console.log(data);
