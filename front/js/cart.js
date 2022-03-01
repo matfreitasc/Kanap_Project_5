@@ -40,47 +40,73 @@ function addToCart() {
           </div>
         </div>
           `;
-  }
-  // handle item quantity change
-  let itemQuantity = document.querySelectorAll(".itemQuantity");
-  for (let i = 0; i < itemQuantity.length; i++) {
-    itemQuantity[i].addEventListener("input", (e) => {
-      cart[i].quantity = e.target.value;
-      // update cart in local storage
-      localStorage.setItem("cart", JSON.stringify(cart));
 
-      console.log(cart);
-    });
-  }
-  // if item quantity is 0, remove item from cart
+    // Handle item quantity change
+    let itemQuantity = document.querySelectorAll(".itemQuantity");
+    for (let i = 0; i < itemQuantity.length; i++) {
+      itemQuantity[i].addEventListener("input", (e) => {
+        cart[i].quantity = e.target.value;
+        // update cart in local storage
+        localStorage.setItem("cart", JSON.stringify(cart));
 
-  // handle item delete
-  let deleteItem = document.querySelectorAll(".deleteItem");
-  for (let i = 0; i < deleteItem.length; i++) {
-    deleteItem[i].addEventListener("click", (e) => {
-      cart.splice(i, 1);
-      localStorage.setItem("cart", JSON.stringify(cart));
-      // delete item from cart
-      e.target.parentElement.parentElement.parentElement.parentElement.remove();
+        console.log(cart);
 
-      console.log(cart);
-    });
-  }
-  // if cart is empty, display empty cart message
-  if (cart.length === 0) {
-    cart__items.innerHTML = `
-        <div class="cart__empty">
-            <p>Your cart is empty</p>
-        </div>
-        `;
+        getTotalQuantity();
+        getTotalPrice();
+      });
+    }
   }
 
-  // get total price
-  let totalPrice = 0;
-  for (let i = 0; i < cart.length; i++) {
-    totalPrice += cart[i].price * cart[i].quantity;
+  // Handle item delete
+
+  function deleteItemFromCart() {
+    let deleteItem = document.querySelectorAll(".deleteItem");
+    for (let i = 0; i < deleteItem.length; i++) {
+      deleteItem[i].addEventListener("click", (e) => {
+        newQuantity = 0;
+        if (newQuantity === 0) {
+          cart.splice(i, 1);
+          localStorage.setItem("cart", JSON.stringify(cart));
+          e.target.parentElement.parentElement.parentElement.parentElement.remove();
+        }
+        getTotalPrice();
+        getTotalQuantity();
+      });
+    }
   }
-  document.querySelector("#totalPrice").innerHTML = totalPrice;
+
+  deleteItemFromCart();
+
+  // Get Total quantity of items inside the cart
+  function getTotalQuantity() {
+    let totalQuantity = document.querySelector("#totalQuantity");
+
+    if (cart.length === 0) {
+      totalQuantity.innerHTML = 0;
+      cart__items.innerHTML = "No items in your cart";
+    } else
+      total = cart.reduce((preValue, CurrentValue) => {
+        return {
+          quantity:
+            parseInt(preValue.quantity, 10) +
+            parseInt(CurrentValue.quantity, 10),
+        };
+      });
+    totalQuantity.innerHTML = total.quantity;
+  }
+  getTotalQuantity();
+
+  // Calculae total price of items inside the cart
+  function getTotalPrice() {
+    let totalPrice = document.querySelector("#totalPrice");
+    let priceTotal = 0;
+    for (let i = 0; i < cart.length; i++) {
+      priceTotal += cart[i].price * cart[i].quantity;
+    }
+    totalPrice.innerHTML = priceTotal;
+    console.log("totalPrice", priceTotal);
+  }
+  getTotalPrice();
 }
 
-addToCart();
+addToCart(cart);
