@@ -9,6 +9,9 @@ let itemData = {
   quantity: 1,
 };
 
+let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+console.log(cart);
+
 const url = new URL("http://localhost:3000/api/products");
 
 const urlID = new URLSearchParams(window.location.search);
@@ -71,13 +74,23 @@ function getItemQuantity(value) {
     itemData.quantity = e.target.value;
   });
 }
-console.log(getItemQuantity(itemData.quantity));
 
-function addToCart() {
-  let cart = JSON.parse(localStorage.getItem("cart"));
-  if (cart === null) {
-    cart = [];
+function addToCart(e) {
+  let pushedItem = true;
+
+  if (cart.length === 0) {
+  } else
+    for (let i = 0; i < cart.length; i++) {
+      if (cart[i]._id === itemData._id && cart[i].colors === itemData.colors) {
+        cart[i].quantity = itemData.quantity;
+        pushedItem = false;
+      }
+    }
+
+  if (pushedItem) {
+    cart.push(itemData);
   }
-  cart.push(itemData);
+
   localStorage.setItem("cart", JSON.stringify(cart));
+  console.log(cart);
 }
