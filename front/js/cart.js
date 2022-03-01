@@ -48,10 +48,12 @@ function addToCart() {
       cart[i].quantity = e.target.value;
       // update cart in local storage
       localStorage.setItem("cart", JSON.stringify(cart));
-      
+
       console.log(cart);
     });
   }
+  // if item quantity is 0, remove item from cart
+
   // handle item delete
   let deleteItem = document.querySelectorAll(".deleteItem");
   for (let i = 0; i < deleteItem.length; i++) {
@@ -64,13 +66,21 @@ function addToCart() {
       console.log(cart);
     });
   }
+  // if cart is empty, display empty cart message
+  if (cart.length === 0) {
+    cart__items.innerHTML = `
+        <div class="cart__empty">
+            <p>Your cart is empty</p>
+        </div>
+        `;
+  }
+
   // get total price
   let totalPrice = 0;
   for (let i = 0; i < cart.length; i++) {
     totalPrice += cart[i].price * cart[i].quantity;
   }
   document.querySelector("#totalPrice").innerHTML = totalPrice;
-
 }
 
 addToCart();
