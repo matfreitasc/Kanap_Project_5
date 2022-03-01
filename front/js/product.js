@@ -22,7 +22,6 @@ const dropDownColors = document.querySelector("#colors");
 fetch(url + "/" + id)
   .then((response) => response.json())
   .then((data) => {
-    console.log(data);
     itemData = data;
     createItem(data);
   })
