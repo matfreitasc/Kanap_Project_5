@@ -18,6 +18,8 @@ const urlID = new URLSearchParams(window.location.search);
 const id = urlID.get("id");
 
 const dropDownColors = document.querySelector("#colors");
+let addToCartButton = document.querySelector("#addToCart");
+let quantity = document.querySelector("#quantity");
 
 fetch(url + "/" + id)
   .then((response) => response.json())
@@ -51,7 +53,7 @@ function createItem(itemData) {
   });
 
   //Add To Cart Button
-  document.querySelector("#addToCart").addEventListener("click", addToCart);
+  addToCart();
 
   // Push quantity to the cart
   getItemQuantity(itemData.value);
@@ -67,29 +69,52 @@ function addDropDownColors(colors) {
 }
 
 // Handle quanity of the product
-function getItemQuantity(value) {
-  let quantity = document.querySelector("#quantity");
+function getItemQuantity() {
   quantity.addEventListener("input", (e) => {
     itemData.quantity = e.target.value;
   });
 }
 
-function addToCart(e) {
-  let pushedItem = true;
-
-  if (cart.length === 0) {
-  } else
-    for (let i = 0; i < cart.length; i++) {
-      if (cart[i]._id === itemData._id && cart[i].colors === itemData.colors) {
-        cart[i].quantity = itemData.quantity;
-        pushedItem = false;
+function addToCart() {
+  let pushedCart = true;
+  addToCartButton.addEventListener("click", (e) => {
+    if (dropDownColors.value === "" || quantity.value === "") {
+      alert("Please Select a color and quantity");
+    } else if (cart.length === 0) {
+      alert("Please select a quantity");
+    } else {
+      if (quantity.value > 0 && quantity.value < 100) {
+        for (let i = 0; i < cart.length; i++) {
+          if (
+            cart[i]._id === itemData._id &&
+            cart[i].colors === itemData.colors
+          ) {
+            cart[i].quantity = itemData.quantity;
+          }
+        }
+      } else {
+        alert("Please select a quantity between 1 and 100");
       }
+      pushedCart = false;
     }
+    if (pushedCart) {
+      cart.push(itemData);
+    }
+    localStorage.setItem("cart", JSON.stringify(cart));
+    addToCartNotification();
+  });
+}
 
-  if (pushedItem) {
-    cart.push(itemData);
-  }
-
-  localStorage.setItem("cart", JSON.stringify(cart));
-  console.log(cart);
+// Add to cart button notificaiton
+function addToCartNotification() {
+  let added_notification = document.createElement("div");
+  added_notification.classList.add("add_to_cart_notification");
+  // add to cart notification
+  added_notification.innerHTML = `
+    Your Item has been added to the cart!
+      `;
+  document.querySelector(".item").appendChild(added_notification);
+  setTimeout(() => {
+    added_notification.remove();
+  }, 2000);
 }
