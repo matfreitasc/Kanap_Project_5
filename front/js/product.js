@@ -10,7 +10,6 @@ let itemData = {
 };
 
 let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-console.log(cart);
 
 const url = new URL("http://localhost:3000/api/products");
 
@@ -53,10 +52,10 @@ function createItem(itemData) {
   });
 
   //Add To Cart Button
-  addToCart();
+  addToCartButton.addEventListener("click", addToCart);
 
   // Push quantity to the cart
-  getItemQuantity(itemData.value);
+  getItemQuantity(itemData.quantity);
 }
 // Add colors to the dropdown menu
 function addDropDownColors(colors) {
@@ -75,34 +74,19 @@ function getItemQuantity() {
   });
 }
 
-function addToCart() {
-  let pushedCart = true;
-  addToCartButton.addEventListener("click", (e) => {
-    if (dropDownColors.value === "" || quantity.value === "") {
-      alert("Please Select a color and quantity");
-    } else if (cart.length === 0) {
-      alert("Please select a quantity");
-    } else {
-      if (quantity.value > 0 && quantity.value < 100) {
-        for (let i = 0; i < cart.length; i++) {
-          if (
-            cart[i]._id === itemData._id &&
-            cart[i].colors === itemData.colors
-          ) {
-            cart[i].quantity = itemData.quantity;
-          }
-        }
-      } else {
-        alert("Please select a quantity between 1 and 100");
-      }
-      pushedCart = false;
+function addToCart(e) {
+  let sentToCart = true;
+  cart.forEach((item) => {
+    if (item._id === itemData._id && item.colors == itemData.colors) {
+      item.quantity = itemData.quantity;
+      sentToCart = false;
     }
-    if (pushedCart) {
-      cart.push(itemData);
-    }
-    localStorage.setItem("cart", JSON.stringify(cart));
-    addToCartNotification();
   });
+  if (sentToCart) {
+    cart.push(itemData);
+  }
+  localStorage.setItem("cart", JSON.stringify(cart));
+  addToCartNotification();
 }
 
 // Add to cart button notificaiton
