@@ -106,33 +106,133 @@ function addToCart() {
 }
 
 // form Validation
+const form__data = document.getElementsByClassName("cart__order__form")[0];
 
-const form_Data = document.getElementsByClassName("cart__order__form")[0];
-
-form_Data.firstName.addEventListener("change", function () {
-  validName(this);
-});
-form_Data.lastName.addEventListener("change", function () {
-  validName(this);
-});
-
-const validName = function (inputName) {
-  let nameRegExp = new RegExp("^[^- ][a-zA-Z '-àâäéèêëïîôöùûü]*[^- ]$", "g");
-  let testName = nameRegExp.test(inputName.value);
-  if (testName) {
-    inputName.nextElementSibling.innerHTML = "Valid";
-    inputName.nextElementSibling.style.color = "green";
+// Validate First Name using regex
+function validateName() {
+  let name = document.getElementById("firstName");
+  let nameRegex = /^[a-zA-Z]{2,}$/;
+  if (nameRegex.test(name.value)) {
+    name.classList.remove("is-invalid");
+    name.classList.add("is-valid");
     return true;
   } else {
-    inputName.nextElementSibling.innerHTML = "Invalid";
-    inputName.nextElementSibling.style.color = "red";
+    name.classList.remove("is-valid");
+    name.classList.add("is-invalid");
     return false;
   }
+}
+// Validate Last Name using regex
+function validateLastName() {
+  let lastName = document.getElementById("lastName");
+  let lastNameRegex = /^[a-zA-Z]{2,}$/;
+  if (lastNameRegex.test(lastName.value)) {
+    lastName.classList.remove("is-invalid");
+    lastName.classList.add("is-valid");
+    return true;
+  } else {
+    lastName.classList.remove("is-valid");
+    lastName.classList.add("is-invalid");
+    return false;
+  }
+}
+
+// Validate home address using regex
+function validateAddress() {
+  let address = document.getElementById("address");
+  let addressRegex = /^[a-zA-Z0-9]{2,}$/;
+  if (addressRegex.test(address.value)) {
+    address.classList.remove("is-invalid");
+    address.classList.add("is-valid");
+    return true;
+  } else {
+    address.classList.remove("is-valid");
+    address.classList.add("is-invalid");
+    return false;
+  }
+}
+// Validate city using regex
+function validateCity() {
+  let city = document.getElementById("city");
+  let cityRegex = /^[a-zA-Z]{2,}$/;
+  if (cityRegex.test(city.value)) {
+    city.classList.remove("is-invalid");
+    city.classList.add("is-valid");
+    return true;
+  } else {
+    city.classList.remove("is-valid");
+    city.classList.add("is-invalid");
+    return false;
+  }
+}
+
+// Validate Email using regex
+function validateEmail() {
+  let email = document.getElementById("email");
+  let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  if (emailRegex.test(email.value)) {
+    email.classList.remove("is-invalid");
+    email.classList.add("is-valid");
+    return true;
+  } else {
+    email.classList.remove("is-valid");
+    email.classList.add("is-invalid");
+    return false;
+  }
+}
+
+form__data.addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (
+    validateName(form__data.firstName) &&
+    validateLastName(form__data.lastName) &&
+    validateCity(form__data.city) &&
+    validateEmail(form__data.email)
+  ) {
+    alert("Your order has been sent");
+    submitOrder();
+  } else {
+    alert("Please fill all the fields");
+    e.preventDefault();
+  }
+});
+
+// Push Order to the local storage
+const pushOrder = function (order) {
+  fetch("http://localhost:3000/api/products/order", {
+    method: "POST",
+    body: JSON.stringify(order),
+    headers: { "Content-type": "application/JSON" },
+  })
+    .then((Response) => Response.json())
+    .then((data) => {
+      console.log(data);
+      console.log(data.orderId);
+      localStorage.setItem("orderId", data.orderId);
+      window.location.href = "confirmation.html" + "?id=" + data.orderId;
+    });
 };
 
-//Address
-form_Data.address.addEventListener("change", function () {
-  validAddress(this);
-});
+// Submit Order
+function submitOrder() {
+  const products = [];
+  for (product of cart) {
+    let productId = product._id;
+    products.push(productId);
+  }
+  const formOrder_Data = {
+    name: form__data.firstName.Value,
+    lastName: form__data.lastName.Value,
+    email: form__data.email.Value,
+    address: form__data.address.Value,
+    city: form__data.city.Value,
+    email: form__data.email.Value,
+  };
+  let order = {
+    products: products,
+    formorder_Data: formOrder_Data,
+  };
+  pushOrder(order);
+}
 
 addToCart(cart);
