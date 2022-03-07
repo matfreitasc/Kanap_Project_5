@@ -105,4 +105,34 @@ function addToCart() {
   getTotalPrice();
 }
 
+// form Validation
+
+const form_Data = document.getElementsByClassName("cart__order__form")[0];
+
+form_Data.firstName.addEventListener("change", function () {
+  validName(this);
+});
+form_Data.lastName.addEventListener("change", function () {
+  validName(this);
+});
+
+const validName = function (inputName) {
+  let nameRegExp = new RegExp("^[^- ][a-zA-Z '-àâäéèêëïîôöùûü]*[^- ]$", "g");
+  let testName = nameRegExp.test(inputName.value);
+  if (testName) {
+    inputName.nextElementSibling.innerHTML = "Valid";
+    inputName.nextElementSibling.style.color = "green";
+    return true;
+  } else {
+    inputName.nextElementSibling.innerHTML = "Invalid";
+    inputName.nextElementSibling.style.color = "red";
+    return false;
+  }
+};
+
+//Address
+form_Data.address.addEventListener("change", function () {
+  validAddress(this);
+});
+
 addToCart(cart);
