@@ -1,5 +1,4 @@
 let items = document.querySelector("#items");
-console.log(items);
 // Connection with the database is done in the following function
 fetch("http://localhost:3000/api/products")
   .then((response) => response.json())

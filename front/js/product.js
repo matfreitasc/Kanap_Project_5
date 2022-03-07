@@ -51,11 +51,11 @@ function createItem(itemData) {
     itemData.colors = e.target.value;
   });
 
-  //Add To Cart Button
-  addToCartButton.addEventListener("click", addToCart);
-
   // Push quantity to the cart
   getItemQuantity(itemData.quantity);
+
+  //Add To Cart Button
+  addToCartButton.addEventListener("click", addToCart);
 }
 // Add colors to the dropdown menu
 function addDropDownColors(colors) {
@@ -75,14 +75,21 @@ function getItemQuantity() {
 }
 
 function addToCart(e) {
-  let sentToCart = true;
-  cart.forEach((item) => {
-    if (item._id === itemData._id && item.colors == itemData.colors) {
-      item.quantity = itemData.quantity;
-      sentToCart = false;
+  let pushedCart = true;
+
+  if (cart.length == 0) {
+  } else {
+    for (let i = 0; i < cart.length; i++) {
+      if (itemData._id === cart[i]._id && itemData.colors == cart[i].colors) {
+        cart[i].quantity = itemData.quantity;
+        pushedCart = false;
+      }
     }
-  });
-  if (sentToCart) {
+  }
+
+  console.log(cart);
+
+  if (pushedCart) {
     cart.push(itemData);
   }
   localStorage.setItem("cart", JSON.stringify(cart));

@@ -2,8 +2,6 @@ let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
 let cart__items = document.querySelector("#cart__items");
 
-console.log(cart);
-
 function addToCart() {
   for (i = 0; i < cart.length; i++) {
     let itemArticle = document.createElement("article");
@@ -48,8 +46,6 @@ function addToCart() {
         cart[i].quantity = e.target.value;
         // update cart in local storage
         localStorage.setItem("cart", JSON.stringify(cart));
-
-        console.log(cart);
 
         getTotalQuantity();
         getTotalPrice();
