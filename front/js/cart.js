@@ -78,7 +78,7 @@ function addToCart() {
     let totalQuantity = document.querySelector("#totalQuantity");
 
     if (cart.length === 0) {
-      totalQuantity.innerHTML = 0;
+      totalQuantity.innerHTML = "0";
       cart__items.innerHTML = "No items in your cart";
     } else
       total = cart.reduce((preValue, CurrentValue) => {
@@ -105,6 +105,7 @@ function addToCart() {
   getTotalPrice();
 }
 
+addToCart(cart);
 // form Validation
 const form__data = document.getElementsByClassName("cart__order__form")[0];
 
@@ -140,7 +141,7 @@ function validateLastName() {
 // Validate home address using regex
 function validateAddress() {
   let address = document.getElementById("address");
-  let addressRegex = /^[a-zA-Z0-9]{2,}$/;
+  let addressRegex = /^\s*\S+(?:\s+\S+){2}/;
   if (addressRegex.test(address.value)) {
     address.classList.remove("is-invalid");
     address.classList.add("is-valid");
@@ -181,58 +182,66 @@ function validateEmail() {
   }
 }
 
+// send data to local storage
 form__data.addEventListener("submit", (e) => {
   e.preventDefault();
+
+  let products = [];
+
+  let cartItems = JSON.parse(localStorage.getItem("cart"));
+
+  for (let i = 0; i < cartItems.length; i++) {
+    products.push(cartItems[i]._id);
+  }
+  console.log(products);
+
+  let contact = {
+    firstName: document.getElementById("firstName").value,
+    lastName: document.getElementById("lastName").value,
+    email: document.getElementById("email").value,
+    address: document.getElementById("address").value,
+    city: document.getElementById("city").value,
+  };
+  console.log(contact);
+
+  let data = {
+    contact: contact,
+    products: products,
+  };
+  console.log(data);
+
   if (
-    validateName(form__data.firstName) &&
-    validateLastName(form__data.lastName) &&
-    validateCity(form__data.city) &&
-    validateEmail(form__data.email)
+    validateName() &&
+    validateLastName() &&
+    validateAddress() &&
+    validateCity() &&
+    validateEmail()
   ) {
-    alert("Your order has been sent");
-    submitOrder();
-  } else {
-    alert("Please fill all the fields");
-    e.preventDefault();
+    pushData(data);
   }
 });
 
-// Push Order to the local storage
-const pushOrder = function (order) {
+const pushData = (data) => {
   fetch("http://localhost:3000/api/products/order", {
     method: "POST",
-    body: JSON.stringify(order),
-    headers: { "Content-type": "application/JSON" },
+
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
   })
-    .then((Response) => Response.json())
+    .then((response) => {
+      return response.json();
+    })
     .then((data) => {
       console.log(data);
+      console.log("data sent");
       console.log(data.orderId);
       localStorage.setItem("orderId", data.orderId);
+
       window.location.href = "confirmation.html" + "?id=" + data.orderId;
+    })
+    .catch((err) => {
+      console.log(err);
     });
 };
-
-// Submit Order
-function submitOrder() {
-  const products = [];
-  for (product of cart) {
-    let productId = product._id;
-    products.push(productId);
-  }
-  const formOrder_Data = {
-    name: form__data.firstName.Value,
-    lastName: form__data.lastName.Value,
-    email: form__data.email.Value,
-    address: form__data.address.Value,
-    city: form__data.city.Value,
-    email: form__data.email.Value,
-  };
-  let order = {
-    products: products,
-    formorder_Data: formOrder_Data,
-  };
-  pushOrder(order);
-}
-
-addToCart(cart);

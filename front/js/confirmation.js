@@ -1,11 +1,12 @@
-// Get order ID from post order and display on the confirmation page
-
-const getUrlConfirmation = new URL(window.location.href);
-console.log(getUrlConfirmation);
+const urlConfirmation = new URL(window.location.href);
 
 const getId = () => {
-  const getConfirmationId = getUrlConfirmation.searchParams.get("id");
-  document.querySelector("#orderId").innerHTML = getConfirmationId;
+  console.log(urlConfirmation);
+  const getConfirmationId = urlConfirmation.searchParams.get("id");
+  console.log(getConfirmationId);
+  document.getElementById("orderId").textContent = getConfirmationId;
 };
 getId();
-// localStorage.removeItem("cart");
+
+localStorage.removeItem("productt");
+localStorage.removeItem("orderId");
