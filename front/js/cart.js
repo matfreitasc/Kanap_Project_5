@@ -112,28 +112,35 @@ const form__data = document.getElementsByClassName("cart__order__form")[0];
 // Validate First Name using regex
 function validateName() {
   let name = document.getElementById("firstName");
+  let nameErr = document.getElementById("firstNameErrorMsg");
   let nameRegex = /^[a-zA-Z]{2,}$/;
   if (nameRegex.test(name.value)) {
     name.classList.remove("is-invalid");
     name.classList.add("is-valid");
+    nameErr.innerHTML = "";
     return true;
   } else {
     name.classList.remove("is-valid");
     name.classList.add("is-invalid");
+    nameErr.innerHTML = "Please enter a valid first name";
     return false;
   }
 }
+
 // Validate Last Name using regex
 function validateLastName() {
   let lastName = document.getElementById("lastName");
+  let lastNameErr = document.getElementById("lastNameErrorMsg");
   let lastNameRegex = /^[a-zA-Z]{2,}$/;
   if (lastNameRegex.test(lastName.value)) {
     lastName.classList.remove("is-invalid");
     lastName.classList.add("is-valid");
+    lastNameErr.innerHTML = "";
     return true;
   } else {
     lastName.classList.remove("is-valid");
     lastName.classList.add("is-invalid");
+    lastNameErr.innerHTML = "Please enter a valid last name";
     return false;
   }
 }
@@ -141,28 +148,36 @@ function validateLastName() {
 // Validate home address using regex
 function validateAddress() {
   let address = document.getElementById("address");
+  let addressErr = document.getElementById("addressErrorMsg");
   let addressRegex = /^\s*\S+(?:\s+\S+){2}/;
   if (addressRegex.test(address.value)) {
     address.classList.remove("is-invalid");
     address.classList.add("is-valid");
+    addressErr.innerHTML = "";
     return true;
   } else {
     address.classList.remove("is-valid");
     address.classList.add("is-invalid");
+    addressErr.innerHTML = "Please enter a valid address";
+
     return false;
   }
 }
 // Validate city using regex
 function validateCity() {
   let city = document.getElementById("city");
+  let cityErr = document.getElementById("cityErrorMsg");
   let cityRegex = /^[a-zA-Z]{2,}$/;
   if (cityRegex.test(city.value)) {
     city.classList.remove("is-invalid");
     city.classList.add("is-valid");
+    cityErr.innerHTML = "";
     return true;
   } else {
     city.classList.remove("is-valid");
     city.classList.add("is-invalid");
+    cityErr.innerHTML = "Please enter a valid city";
+
     return false;
   }
 }
@@ -170,17 +185,33 @@ function validateCity() {
 // Validate Email using regex
 function validateEmail() {
   let email = document.getElementById("email");
+  let emailErr = document.getElementById("emailErrorMsg");
   let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
   if (emailRegex.test(email.value)) {
     email.classList.remove("is-invalid");
     email.classList.add("is-valid");
+    emailErr.innerHTML = "";
     return true;
   } else {
     email.classList.remove("is-valid");
     email.classList.add("is-invalid");
+    emailErr.innerHTML = "Please enter a Valid Email Address";
+
     return false;
   }
 }
+
+//  Add a form listener to validate the form on keyup or blur
+form__data.firstName.addEventListener("keyup", validateName);
+form__data.firstName.addEventListener("blur", validateName);
+form__data.lastName.addEventListener("blur", validateLastName);
+form__data.lastName.addEventListener("keyup", validateLastName);
+form__data.address.addEventListener("keyup", validateAddress);
+form__data.address.addEventListener("blur", validateAddress);
+form__data.city.addEventListener("keyup", validateCity);
+form__data.city.addEventListener("blur", validateCity);
+form__data.email.addEventListener("keyup", validateEmail);
+form__data.email.addEventListener("blur", validateEmail);
 
 // send data to local storage
 form__data.addEventListener("submit", (e) => {
