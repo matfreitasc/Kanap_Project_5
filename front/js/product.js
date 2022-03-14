@@ -49,7 +49,6 @@ function createItem(itemData) {
   addDropDownColors(itemData.colors);
   dropDownColors.addEventListener("change", (e) => {
     itemData.colors = e.target.value;
-    console.log(itemData.colors);
   });
 
   // Push quantity to the cart
@@ -88,12 +87,12 @@ function addToCart(itemData) {
         }
       }
     }
-    if (quantity.value == 0) {
-      alert("Please select a quantity");
-      return;
-    }
     if (colors.value == "") {
       alert("Please select a color");
+      return;
+    }
+    if (quantity.value == 0) {
+      alert("Please select a quantity");
       return;
     }
     if (
