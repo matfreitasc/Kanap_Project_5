@@ -5,8 +5,7 @@ const getId = () => {
   const getConfirmationId = urlConfirmation.searchParams.get("id");
   console.log(getConfirmationId);
   document.getElementById("orderId").textContent = getConfirmationId;
+  localStorage.removeItem("cart");
+  localStorage.removeItem("orderId");
 };
 getId();
-
-localStorage.removeItem("productt");
-localStorage.removeItem("orderId");
