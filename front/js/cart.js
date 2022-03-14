@@ -100,7 +100,6 @@ function addToCart() {
       priceTotal += cart[i].price * cart[i].quantity;
     }
     totalPrice.innerHTML = priceTotal;
-    console.log("totalPrice", priceTotal);
   }
   getTotalPrice();
 }
@@ -222,8 +221,6 @@ form__data.addEventListener("submit", (e) => {
   for (let i = 0; i < cart.length; i++) {
     products.push(cart[i]._id);
   }
-  console.log(products);
-
   let contact = {
     firstName: document.getElementById("firstName").value,
     lastName: document.getElementById("lastName").value,
@@ -264,9 +261,6 @@ const pushData = (data) => {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
-      console.log("data sent");
-      console.log(data.orderId);
       localStorage.setItem("orderId", data.orderId);
 
       window.location.href = "confirmation.html" + "?id=" + data.orderId;

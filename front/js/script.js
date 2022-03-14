@@ -5,7 +5,6 @@ fetch("http://localhost:3000/api/products")
   .then((jsonResponse) => createProductCards(jsonResponse));
 
 function createProductCards(productCards) {
-  console.log(productCards);
   productCards.forEach((productCard) => {
     let card = document.createElement("div");
     card.classList.add("card");
