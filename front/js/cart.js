@@ -9,7 +9,6 @@ function addToCart() {
     itemArticle.setAttribute("data-id", cart[i]._id);
     itemArticle.setAttribute("data-colors", cart[i].colors);
     cart__items.appendChild(itemArticle);
-
     itemArticle.innerHTML = `
           <div class="cart__item__img">
           <img src="${cart[i].imageUrl}" alt="${cart[i].altTxt}" />
