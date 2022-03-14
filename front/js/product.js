@@ -49,6 +49,7 @@ function createItem(itemData) {
   addDropDownColors(itemData.colors);
   dropDownColors.addEventListener("change", (e) => {
     itemData.colors = e.target.value;
+    console.log(itemData.colors);
   });
 
   // Push quantity to the cart
@@ -79,10 +80,7 @@ function addToCart(itemData) {
     e.preventDefault();
     if (cart.length !== 0) {
       for (let i = 0; i < cart.length; i++) {
-        if (
-          cart[i]._id === itemData._id &&
-          cart[i].colors === itemData.colors
-        ) {
+        if (cart[i]._id == itemData._id && cart[i].colors === itemData.colors) {
           cart[i].quantity = quantity.value;
           localStorage.setItem("cart", JSON.stringify(cart));
           addToCartNotification("item quantity has been updated!");
@@ -94,7 +92,7 @@ function addToCart(itemData) {
       alert("Please select a quantity");
       return;
     }
-    if (itemData.colors.length == 3) {
+    if (colors.value == "") {
       alert("Please select a color");
       return;
     }
