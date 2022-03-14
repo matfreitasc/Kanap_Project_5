@@ -46,7 +46,6 @@ function addToCart() {
         cart[i].quantity = e.target.value;
         // update cart in local storage
         localStorage.setItem("cart", JSON.stringify(cart));
-
         getTotalQuantity();
         getTotalPrice();
       });
@@ -77,10 +76,10 @@ function addToCart() {
   function getTotalQuantity() {
     let totalQuantity = document.querySelector("#totalQuantity");
 
-    if (cart.length === 0) {
+    if (cart.length === 0 || cart === null) {
       totalQuantity.innerHTML = "0";
       cart__items.innerHTML = "No items in your cart";
-    } else
+    } else {
       total = cart.reduce((preValue, CurrentValue) => {
         return {
           quantity:
@@ -88,7 +87,8 @@ function addToCart() {
             parseInt(CurrentValue.quantity, 10),
         };
       });
-    totalQuantity.innerHTML = total.quantity;
+      totalQuantity.innerHTML = total.quantity;
+    }
   }
   getTotalQuantity();
 
@@ -219,10 +219,8 @@ form__data.addEventListener("submit", (e) => {
 
   let products = [];
 
-  let cartItems = JSON.parse(localStorage.getItem("cart"));
-
-  for (let i = 0; i < cartItems.length; i++) {
-    products.push(cartItems[i]._id);
+  for (let i = 0; i < cart.length; i++) {
+    products.push(cart[i]._id);
   }
   console.log(products);
 
@@ -233,22 +231,23 @@ form__data.addEventListener("submit", (e) => {
     address: document.getElementById("address").value,
     city: document.getElementById("city").value,
   };
-  console.log(contact);
 
   let data = {
     contact: contact,
     products: products,
   };
-  console.log(data);
 
   if (
     validateName() &&
     validateLastName() &&
     validateAddress() &&
     validateCity() &&
-    validateEmail()
+    validateEmail() &&
+    cart.length > 0
   ) {
     pushData(data);
+  } else {
+    alert("No items in cart");
   }
 });
 
