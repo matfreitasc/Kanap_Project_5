@@ -79,7 +79,11 @@ function addToCart(itemData) {
     e.preventDefault();
     if (cart.length !== 0) {
       for (let i = 0; i < cart.length; i++) {
-        if (cart[i]._id == itemData._id && cart[i].colors === itemData.colors) {
+        if (
+          cart[i]._id == itemData._id &&
+          cart[i].colors === itemData.colors &&
+          itemData.quantity > 0
+        ) {
           cart[i].quantity = quantity.value;
           localStorage.setItem("cart", JSON.stringify(cart));
           addToCartNotification("item quantity has been updated!");
@@ -95,11 +99,7 @@ function addToCart(itemData) {
       alert("Please select a quantity");
       return;
     }
-    if (
-      itemData.quantity > 0 &&
-      itemData.quantity <= 100 &&
-      itemData.quantity !== 0
-    ) {
+    if (itemData.quantity > 0 && itemData.quantity <= 100) {
       itemData.quantity = quantity.value;
       itemData.colors = dropDownColors.value;
       cart.push(itemData);
