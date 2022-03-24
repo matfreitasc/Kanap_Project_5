@@ -2,7 +2,6 @@ let itemData = {
   colors: "",
   _id: "",
   name: "",
-  price: "",
   imageUrl: "",
   description: "",
   altTxt: "",

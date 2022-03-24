@@ -1,3 +1,5 @@
+const url = new URL("http://localhost:3000/api/products");
+
 let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
 let cart__items = document.querySelector("#cart__items");
@@ -9,6 +11,18 @@ function addToCart() {
     itemArticle.setAttribute("data-id", cart[i]._id);
     itemArticle.setAttribute("data-colors", cart[i].colors);
     cart__items.appendChild(itemArticle);
+
+    fetch(url + "/" + cart[i]._id)
+      .then((response) => response.json())
+      .then((data) => {
+        itemPrice = data.price;
+      })
+      .catch((error) => console.log(error));
+
+    for (let x = 0; x < cart.length; x++) {
+      Price = cart[x].price;
+    }
+
     itemArticle.innerHTML = `
           <div class="cart__item__img">
           <img src="${cart[i].imageUrl}" alt="${cart[i].altTxt}" />
@@ -17,7 +31,7 @@ function addToCart() {
           <div class="cart__item__content__description">
             <h2>${cart[i].name}</h2>
             <p>${cart[i].colors}</p>
-            <p>€: ${cart[i].price}</p>
+            <p>€: ${Price}</p>
           </div>
           <div class="cart__item__content__settings">
             <div class="cart__item__content__settings__quantity">
@@ -50,7 +64,6 @@ function addToCart() {
       });
     }
   }
-
   // Handle item delete
 
   function deleteItemFromCart() {
